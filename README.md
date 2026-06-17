@@ -11,6 +11,13 @@ python pretrain.py -d cifar10
 ```
 python PIDD.py -d cifar10 --ipc 50 --factor 2 
 ```
+
+4. Feature Evolution on Energy Landscape 
+```
+cd visualization
+python visualize.py
+```
+
 ## Acknowledgement
 Our code is built upon [IDC](https://github.com/snu-mllab/efficient-dataset-condensation) and [DANCE](https://github.com/Hansong-Zhang/DANCE)
 
