@@ -113,6 +113,17 @@ def visualize_energy_to_pdf(features,lables,
     N, D = X_all.shape
     num_real = int(num_real)
 
+    # ------------------------------------------------------------
+    # Label mapping (only a subset of labels are used in this paper):
+    #   0  -> Real 
+    #   2  -> PIDD
+    #   11 -> IID
+    #   12 -> IDM
+    #   14 -> HDD
+    #   15..35 -> Process methods (21 groups, indices 0..20 in code)
+    # Other labels (e.g. 1,3,...) are ignored in this visualization.
+    # ------------------------------------------------------------
+
     X_real = X_all[methods_labels_all==0]
     X_pidd = X_all[methods_labels_all==2]
     X_iid = X_all[methods_labels_all==11]
