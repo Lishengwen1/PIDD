@@ -1,6 +1,6 @@
 Code for "Physics-Informed Dataset Distillation"
 
-## Getting Started
+## Dataset Distillation
 1. Change the data paths and results paths in arguments/reproduce_xxxx.py
 2. Perform the pre-training process
 ```
@@ -12,6 +12,7 @@ python pretrain.py -d cifar10
 python PIDD.py -d cifar10 --ipc 50 --factor 2 
 ```
 
+## Visualization
 4. Feature Evolution on Energy Landscape 
 ```
 cd visualization
