@@ -362,6 +362,7 @@ def plot_energy_colorbar(energy_min, energy_max, cmap='RdYlBu_r',
     
 if __name__ == "__main__":
     import torch
+    # feature extracted from a 3-layer ResNet trained on CIFAR-10
     features = torch.load('./features.pt')
     methods_lables = torch.load('./methods_labels.pt')
     out = visualize_energy_to_pdf(features, methods_lables, 
