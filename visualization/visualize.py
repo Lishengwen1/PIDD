@@ -114,14 +114,16 @@ def visualize_energy_to_pdf(features,lables,
     num_real = int(num_real)
 
     # ------------------------------------------------------------
-    # Label mapping (only a subset of labels are used in this paper):
-    #   0  -> Real 
-    #   2  -> PIDD
-    #   11 -> IID
-    #   12 -> IDM
-    #   14 -> HDD
-    #   15..35 -> Process methods (21 groups, indices 0..20 in code)
-    # Other labels (e.g. 1,3,...) are ignored in this visualization.
+    # Label mapping used in this visualization (only the subset that appears in the paper's figures is plotted):
+    #   - 0  : Real 
+    #   - 2  : PIDD
+    #   - 11 : IID
+    #   - 12 : IDM
+    #   - 14 : HDD
+    #   - 15–35 : Process methods (21 groups, internally indexed 0–20)
+    #
+    # Labels not listed above (e.g., 1, 3, 4, ...) correspond to other setting or methods such as ipc1, ipc50, DSDM, DANCE, etc., 
+    # but they are not included in this visualization to keep focus on the selected methods as presented in the paper.
     # ------------------------------------------------------------
 
     X_real = X_all[methods_labels_all==0]
