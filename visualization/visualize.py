@@ -197,7 +197,7 @@ def visualize_energy_to_pdf(features,lables,
 
     # ----- Figure 1: Real points only (scatter, not energy‑colored) -----
     fig, ax = plt.subplots(figsize=figsize)
-    ax.scatter(emb_real[:,0], emb_real[:,1], c=colors['real'], s=20, alpha=1.0,edgecolors='black', linewidths=0.3)
+    ax.scatter(emb_real[:,0], emb_real[:,1], c=colors['real'], s=20, alpha=1.0,edgecolors='none')
     ax.set_xlim(x_lim)
     ax.set_ylim(y_lim)
     _remove_axes(ax)
@@ -281,7 +281,7 @@ def visualize_energy_to_pdf(features,lables,
     fig, ax = plt.subplots(figsize=figsize)
     ax.scatter(emb_real[:,0], emb_real[:,1], c=colors['real'], s=20, alpha=1.0, edgecolors='none')
     if len(emb_iid) > 0:
-        ax.scatter(emb_iid[:,0], emb_iid[:,1], c=colors['dsam'], s=50, alpha=1.0, edgecolors='black', linewidths=0.3)
+        ax.scatter(emb_iid[:,0], emb_iid[:,1], c=colors['dsam'], s=50, alpha=1.0, edgecolors='none')
     ax.set_xlim(x_lim)
     ax.set_ylim(y_lim)
     _remove_axes(ax)
