@@ -9,7 +9,7 @@ python pretrain.py -d cifar10
 
 3. Perform the condensation process using PIDD
 ```
-python PIDD.py -d cifar10 --ipc 50 --factor 2 
+python PIDD.py -d cifar10 --type PIDD --ipc 50 
 ```
 
 ## Visualization

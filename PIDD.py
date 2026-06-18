@@ -387,7 +387,7 @@ def condense(args, logger, device='cuda'):
 
             if args.type == "KL_forward":
                 loss =  sliced_gaussian_kl(feat_tg, feat, num_slices=args.num_slices, eps=args.eps)
-            elif args.type == "KL_reverse":
+            elif args.type == "PIDD": # KL_reverse
                 loss = sliced_gaussian_kl(feat, feat_tg, num_slices=args.num_slices, eps=args.eps)
 
 
