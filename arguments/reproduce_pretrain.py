@@ -14,8 +14,8 @@ def set_arguments(args):
         args.net_type = 'convnet'
         args.depth = 3
         args.niter = 10000
-        args.pretrain_amount = 20
-        args.pretrain_epochs = 100
+        args.pretrain_amount = 5
+        args.pretrain_epochs = 60
         if args.dataset[:5] == 'cifar':
             args.data_dir = './data'
         elif args.dataset == 'svhn':
@@ -29,15 +29,15 @@ def set_arguments(args):
             args.net_type = 'convnet'
             args.depth = 4
             args.niter = 10000
-            args.pretrain_amount = 20
-            args.pretrain_epochs = 150
+            args.pretrain_amount = 5
+            args.pretrain_epochs = 80
         elif args.dataset in ['imagenette', 'imagewoof', 'imagemeow', 'imagesquawk', 'imagefruit', 'imageyellow']:
             args.imagenet_dir = ''
             args.net_type = 'convnet'
             args.depth = 5
             args.niter = 10000
-            args.pretrain_amount = 20
-            args.pretrain_epochs = 150
+            args.pretrain_amount = 5
+            args.pretrain_epochs = 80
 
             if args.nclass == 10:
                 args.batch_real = 128

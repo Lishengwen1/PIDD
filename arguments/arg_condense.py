@@ -64,7 +64,7 @@ parser.add_argument('-d',
                     '--dataset',
                     default='cifar10',
                     type=str,
-                    help='dataset (options: mnist, fashion, svhn, cifar10, cifar100, and imagenet)')
+                    help='dataset (options: fashion, svhn, cifar10, cifar100, and imagenet)')
 
 
 parser.add_argument('--data_dir',
@@ -193,7 +193,6 @@ parser.add_argument(
 )
 parser.add_argument('--lr_img', type=float, default=5e-3, help='condensed data learning rate')
 parser.add_argument('--mom_img', type=float, default=0.5, help='condensed data momentum')
-parser.add_argument('--reproduce', default=True, help='for reproduce our setting') # action='store_true', 
 parser.add_argument('--type', default='KL_forward', help='for selete KL_forward, KL_reverse') 
 parser.add_argument('--lambdac', type=float, default=0.0005, help='semantic calibration weight')
 parser.add_argument('--eps', type=float, default=1e-08, help='smoothing constant') 
@@ -222,8 +221,6 @@ if args.dataset[:5] == 'cifar':
         args.nclass = 10
     elif args.dataset == 'cifar100':
         args.nclass = 100
-    elif args.dataset == 'cifar100_20':
-        args.nclass = 20
 
 elif args.dataset == 'svhn':
     args.size = 32
@@ -232,13 +229,6 @@ elif args.dataset == 'svhn':
     args.dsa = True
     args.dsa_strategy = remove_aug(args.dsa_strategy, 'flip')
 
-elif args.dataset[:5] == 'mnist':
-    args.nclass = 10
-    args.size = 28
-    args.nch = 1
-    args.mix_p = 0.5
-    args.dsa = True
-    args.dsa_strategy = remove_aug(args.dsa_strategy, 'flip')
 
 elif args.dataset == 'fashion':
     args.nclass = 10

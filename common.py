@@ -59,19 +59,6 @@ def define_model(args, nclass, logger=None, size=None):
     return model
 
 
-coarse_labels = [
-    4, 1, 14, 8, 0, 6, 7, 7, 18, 3, 
-    3, 14, 9, 18, 7, 11, 3, 9, 7, 11,
-    6, 11, 5, 10, 7, 6, 13, 15, 3, 15, 
-    0, 11, 1, 10, 12, 14, 16, 9, 11, 5,
-    5, 19, 8, 8, 15, 13, 14, 17, 18, 10, 
-    16, 4, 17, 4, 2, 0, 17, 4, 18, 17, 
-    10, 3, 2, 12, 12, 16, 12, 1, 9, 19, 
-    2, 10, 0, 1, 16, 12, 9, 13, 15, 13, 
-    16, 19, 2, 4, 6, 19, 5, 5, 8, 19, 
-    18, 1, 2, 15, 6, 0, 17, 8, 14, 13
-]
-
 
 def load_resized_data(args):
     """Load original training data (fixed spatial size and without augmentation) for condensation
@@ -93,19 +80,7 @@ def load_resized_data(args):
         transform_test = transforms.Compose([transforms.ToTensor(), normalize])
         val_dataset = datasets.CIFAR100(args.data_dir, train=False, transform=transform_test)
         train_dataset.nclass = 100
-    elif args.dataset == 'cifar100_20':
-        train_dataset = datasets.CIFAR100(args.data_dir,
-                                          train=True,
-                                          download=True,
-                                          transform=transforms.ToTensor())
-        original_targets = train_dataset.targets
-        train_dataset.targets = [coarse_labels[target] for target in original_targets]
-        normalize = transforms.Normalize(mean=MEANS['cifar100'], std=STDS['cifar100'])
-        transform_test = transforms.Compose([transforms.ToTensor(), normalize])
-        val_dataset = datasets.CIFAR100(args.data_dir, train=False, transform=transform_test)
-        original_targets = val_dataset.targets
-        val_dataset.targets = [coarse_labels[target] for target in original_targets]
-        train_dataset.nclass = 20
+
 
     elif args.dataset == 'svhn':
         train_dataset = datasets.SVHN(os.path.join(args.data_dir, 'SVHN'),
@@ -123,16 +98,6 @@ def load_resized_data(args):
                                     transform=transform_test)
         train_dataset.nclass = 10
 
-    elif args.dataset == 'mnist':
-        train_dataset = datasets.MNIST(args.data_dir, train=True, 
-                                        download=True,
-                                        transform=transforms.ToTensor())
-
-        normalize = transforms.Normalize(mean=MEANS['mnist'], std=STDS['mnist'])
-        transform_test = transforms.Compose([transforms.ToTensor(), normalize])
-
-        val_dataset = datasets.MNIST(args.data_dir, train=False, transform=transform_test)
-        train_dataset.nclass = 10
 
     elif args.dataset == 'fashion':
         train_dataset = datasets.FashionMNIST(args.data_dir,
@@ -241,16 +206,6 @@ def remove_aug(augtype, remove_aug):
     return "_".join(aug_list)
 
 
-# def diffaug(args, device='cuda'):
-#     """Differentiable augmentation for condensation
-#     """
-#     aug_type = args.aug_type
-#     normalize = utils.Normalize(mean=MEANS[args.dataset], std=STDS[args.dataset], device=device)
-#     print("Augmentataion Matching: ", aug_type)
-#     augment = DiffAug(strategy=aug_type, batch=True)
-#     aug_batch = transforms.Compose([normalize, augment])
-
-#     return aug_batch
 
 def diffaug(args, device='cuda'):
     """Differentiable augmentation for condensation

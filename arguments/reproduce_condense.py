@@ -1,8 +1,4 @@
 def set_arguments(args):
-    """Specific arguments for reproduce our condensed data
-       The metric choice does not matter much.
-       But, you should adjust lr_img according to the metric.
-    """
     if args.dataset == 'imagenet':
         args.data_name = "{}{}".format(args.dataset, args.nclass)
     else:
@@ -18,13 +14,10 @@ def set_arguments(args):
         args.pretrain_amount = 20
         args.pretrain_epochs = 60
         if args.dataset[:5] == 'cifar':
-            args.data_dir = '/home/zhang/E/lishengwen/data'
+            args.data_dir = './data'
         elif args.dataset == 'svhn':
             args.data_dir = ''
-            # if args.factor == 1 and args.ipc == 1:
-            #     # In this case, evaluation w/o mixup is much more effective
-            #     args.mixup = 'vanilla'
-            #     args.dsa_strategy = 'color_crop_cutout_scale_rotate'
+
         elif args.dataset == 'fashion':
             args.data_dir = ''
         elif args.dataset == 'mnist':
@@ -62,20 +55,10 @@ def set_arguments(args):
             args.decode_type = 'bound'
 
 
-    args.exp_name = 'Ipc{}_Fac{}_Lr{}_Npm{}_Bsr{}_Bss{}'.format(args.ipc, 
-                                                                args.factor, 
-                                                                args.lr_img, 
-                                                                args.num_premodel, 
-                                                                args.batch_real,
-                                                                args.batch_syn_max)
     # Result folder name
     if args.test:
         args.save_dir = './test_results/'
     else:
-        args.save_dir = '/home/zhang/E/lishengwen/code/PIDD-main/results/{}/{}/ipc{}/lambdac{}_eps{}_seed{}'.format(args.dataset, args.type, args.ipc, str(args.lambdac), str(args.eps), args.seed) 
-
-
-        
-
+        args.save_dir = './results/{}/{}/ipc{}/lambdac{}_eps{}_seed{}'.format(args.dataset, args.type, args.ipc, str(args.lambdac), str(args.eps), args.seed) 
 
     return args

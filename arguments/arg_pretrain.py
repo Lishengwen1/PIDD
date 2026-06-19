@@ -34,7 +34,7 @@ parser.add_argument('-d',
                     '--dataset',
                     default='cifar10',
                     type=str,
-                    help='dataset (options: mnist, fashion, svhn, cifar10, cifar100, and imagenet)')
+                    help='dataset (options: fashion, svhn, cifar10, cifar100, and imagenet)')
 
 parser.add_argument('--data_dir',
                     default='./data',
@@ -115,7 +115,6 @@ parser.add_argument('-j', '--workers', default=8, type=int, help='number of data
 
 
 parser.add_argument('-i', '--ipc', type=int, default=-1, help='number of condensed data per class')
-parser.add_argument('--reproduce', default=True, help='for reproduce our setting') # , action='store_true'
 parser.add_argument('--gpu', type=int, default=1, help='for selete gpu') 
 
 parser.set_defaults(bottleneck=True)

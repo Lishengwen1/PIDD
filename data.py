@@ -18,12 +18,8 @@ MEANS['cifar10'] = MEANS['cifar']
 STDS['cifar10'] = STDS['cifar']
 MEANS['cifar100'] = MEANS['cifar']
 STDS['cifar100'] = STDS['cifar']
-MEANS['cifar100_20'] = MEANS['cifar']
-STDS['cifar100_20'] = STDS['cifar']
 MEANS['svhn'] = [0.4377, 0.4438, 0.4728]
 STDS['svhn'] = [0.1980, 0.2010, 0.1970]
-MEANS['mnist'] = [0.1307]
-STDS['mnist'] = [0.3081]
 MEANS['fashion'] = [0.2861]
 STDS['fashion'] = [0.3530]
 MEANS['tinyimagenet'] = [0.485, 0.456, 0.406]
@@ -141,7 +137,7 @@ class ImageFolder_mtt(datasets.DatasetFolder):
         classes = []
         # ['imagenette', 'imagewoof', 'imagemeow', 'imagesquawk', 'imagefruit', 'imageyellow']
         if type != 'none':
-            with open('/home/zhang/E/lishengwen/code/PIDD/misc/class{}.txt'.format(type), 'r') as f:
+            with open('./misc/class{}.txt'.format(type), 'r') as f:
                 class_name = f.readlines()
         for c in class_name:
             c = c.split('\n')[0]
@@ -737,19 +733,6 @@ class ClassPartMemDataLoader(MultiEpochsDataLoader):
 
         return data.cuda(), target.cuda()
 
-coarse_labels = [
-    4, 1, 14, 8, 0, 6, 7, 7, 18, 3, 
-    3, 14, 9, 18, 7, 11, 3, 9, 7, 11,
-    6, 11, 5, 10, 7, 6, 13, 15, 3, 15, 
-    0, 11, 1, 10, 12, 14, 16, 9, 11, 5,
-    5, 19, 8, 8, 15, 13, 14, 17, 18, 10, 
-    16, 4, 17, 4, 2, 0, 17, 4, 18, 17, 
-    10, 3, 2, 12, 12, 16, 12, 1, 9, 19, 
-    2, 10, 0, 1, 16, 12, 9, 13, 15, 13, 
-    16, 19, 2, 4, 6, 19, 5, 5, 8, 19, 
-    18, 1, 2, 15, 6, 0, 17, 8, 14, 13
-]
-
 def load_data(args):
     """Load training and validation data
     """
@@ -760,14 +743,7 @@ def load_data(args):
             train_dataset = datasets.CIFAR100(args.data_dir, train=True, transform=train_transform)
             val_dataset = datasets.CIFAR100(args.data_dir, train=False, transform=test_transform)
             nclass = 100
-        elif args.dataset == 'cifar100_20':
-            train_dataset = datasets.CIFAR100(args.data_dir, train=True, transform=train_transform)
-            original_targets = train_dataset.targets
-            train_dataset.targets = [coarse_labels[target] for target in original_targets]
-            val_dataset = datasets.CIFAR100(args.data_dir, train=False, transform=test_transform)
-            original_targets = val_dataset.targets
-            val_dataset.targets = [coarse_labels[target] for target in original_targets]
-            nclass = 20
+
         elif args.dataset == 'cifar10':
             train_dataset = datasets.CIFAR10(args.data_dir, train=True, transform=train_transform)
             val_dataset = datasets.CIFAR10(args.data_dir, train=False, transform=test_transform)
@@ -795,12 +771,6 @@ def load_data(args):
         val_dataset = datasets.FashionMNIST(args.data_dir, train=False, transform=test_transform)
         nclass = 10
 
-    elif args.dataset == 'mnist':
-        train_transform, test_transform = transform_mnist(augment=args.augment)
-
-        train_dataset = datasets.MNIST(args.data_dir, train=True, transform=train_transform)
-        val_dataset = datasets.MNIST(args.data_dir, train=False, transform=test_transform)
-        nclass = 10
 
     elif args.dataset == 'imagenet':
         traindir = os.path.join(args.imagenet_dir, 'train')

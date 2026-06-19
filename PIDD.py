@@ -202,8 +202,6 @@ class Synthesizer():
             train_transform, _ = transform_cifar(augment=augment, from_tensor=True)
         elif args.dataset == 'svhn':
             train_transform, _ = transform_svhn(augment=augment, from_tensor=True)
-        elif args.dataset == 'mnist':
-            train_transform, _ = transform_mnist(augment=augment, from_tensor=True)
         elif args.dataset == 'fashion':
             train_transform, _ = transform_fashion(augment=augment, from_tensor=True)
         elif args.dataset == 'tinyimagenet':
@@ -242,12 +240,6 @@ class Synthesizer():
         convnet_result = test_data(args, loader, val_loader, test_resnet=False, logger=logger)
 
         return convnet_result
-        # if bench and not (args.dataset in ['mnist', 'fashion']):
-        #     resnet_result = test_data(args, loader, val_loader, test_resnet=True, logger=logger)
-        #     return convnet_result, resnet_result
-        # else:
-        #     return convnet_result
-
 
 
 def sliced_gaussian_kl(P_feats: torch.Tensor,
@@ -258,29 +250,29 @@ def sliced_gaussian_kl(P_feats: torch.Tensor,
     device = P_feats.device
     Nr, d = P_feats.shape
 
-    # 1. 随机单位方向
+    # 1. Random unit directions
     t = torch.randn(num_slices, d, device=device)
     t = torch.nn.functional.normalize(t, dim=1)  # (K, d)
 
 
-    # 2. 投影到每个方向
+    # 2. Project onto each direction
     proj_p = P_feats @ t.t()  # (Nr, K)
     proj_q = Q_feats  @ t.t()  # (Ns, K)
 
 
-    # 3. 对每个方向拟合一维高斯：计算均值和方差
+    # 3. Fit a 1D Gaussian per direction: compute mean and variance
     mu_p = proj_p.mean(dim=0)              # (K,)
     var_p = proj_p.var(dim=0, unbiased=False) + eps  # (K,)
     mu_q = proj_q.mean(dim=0)              # (K,)
     var_q = proj_q.var(dim=0, unbiased=False) + eps  # (K,)
 
-    # 4. 1D Gauss KL 公式：KL(N_p || N_q)
+    # 4. 1D Gaussian KL formula: KL(N_p || N_q)
     #    KL = 0.5 * [ log(var_q/var_p) + (var_p + (mu_p-mu_q)^2)/var_q - 1 ]
     term1 = torch.log(var_q / var_p)
     term2 = (var_p + (mu_p - mu_q).pow(2)) / var_q
     kl_1d = 0.5 * (term1 + term2 - 1.0)     # (K,)
 
-    # 5. 平均所有切片
+    # 5. Average over all slices
     return kl_1d.mean()
 
 
