@@ -114,15 +114,14 @@ parser.add_argument('--verbose',
 parser.add_argument('-j', '--workers', default=8, type=int, help='number of data loading workers')
 
 
-parser.add_argument('-i', '--ipc', type=int, default=-1, help='number of condensed data per class')
+parser.add_argument('-i', '--ipc', type=int, default=-1, help='number of synthetic data per class')
 parser.add_argument('--gpu', type=int, default=1, help='for selete gpu') 
 
 parser.set_defaults(bottleneck=True)
 parser.set_defaults(verbose=False)
 args = parser.parse_args()
 
-if args.reproduce:
-    args = set_arguments(args)
+args = set_arguments(args)
 
 """ 
 DATA 

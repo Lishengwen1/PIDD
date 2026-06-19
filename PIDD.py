@@ -17,7 +17,7 @@ import math
 
 
 class Synthesizer():
-    """Condensed data class
+    """Synthetic data class
     """
     def __init__(self, args, nclass, nchannel, hs, ws, device='cuda'):
         device = torch.device('cuda:' + str(args.gpu) if torch.cuda.is_available() else 'cpu')
@@ -48,7 +48,7 @@ class Synthesizer():
         print(f"Factor: {self.factor} ({self.decode_type})")
 
     def init(self, loader, init_type='noise'):
-        """Condensed data initialization
+        """Synthetic data initialization
         """
         if init_type == 'random':
             print("Random initialize synset")
@@ -190,7 +190,7 @@ class Synthesizer():
         return data, target
 
     def loader(self, args, augment=True):
-        """Data loader for condensed data
+        """Data loader for Synthetic data
         """
         if args.dataset in ['imagenette', 'imagewoof', 'imagemeow', 'imagesquawk', 'imagefruit', 'imageyellow']:
             train_transform, _ = transform_imagenet(augment=augment,
@@ -224,7 +224,7 @@ class Synthesizer():
 
         train_dataset = TensorDataset(data_dec.cpu(), target_dec.cpu(), train_transform)
 
-        print("Decode condensed data: ", data_dec.shape)
+        print("Decode Synthetic data: ", data_dec.shape)
         nw = 0 if not augment else args.workers
         train_loader = MultiEpochsDataLoader(train_dataset,
                                              batch_size=args.batch_size,
@@ -234,7 +234,7 @@ class Synthesizer():
         return train_loader
 
     def test(self, args, val_loader, logger, bench=True):
-        """Condensed data evaluation
+        """Synthetic data evaluation
         """
         loader = self.loader(args, args.augment)
         convnet_result = test_data(args, loader, val_loader, test_resnet=False, logger=logger)
@@ -282,8 +282,8 @@ def negative_log_expert_probability(img_syn, label_syn, trained_model):
     return -torch.log(label_probs + 1e-8).mean()
 
 
-def condense(args, logger, device='cuda'):
-    """Optimize condensed data
+def distillation(args, logger, device='cuda'):
+    """Optimize Synthetic data
     """
     # Define real dataset and loader
     device = torch.device('cuda:' + str(args.gpu) if torch.cuda.is_available() else 'cpu')
@@ -309,13 +309,13 @@ def condense(args, logger, device='cuda'):
     aug, _ = diffaug(args)
 
 
-    if not args.test:
-        save_img(os.path.join(args.save_dir, 'init.png'),
-            synset.data,
-            unnormalize=False,
-            dataname=args.dataset)
-        torch.save([synset.data.detach().cpu(), synset.targets.cpu()],
-        os.path.join(args.save_dir, 'data_0.pt'))
+    # if not args.test:
+        # save_img(os.path.join(args.save_dir, 'init.png'),
+        #     synset.data,
+        #     unnormalize=False,
+        #     dataname=args.dataset)
+        # torch.save([synset.data.detach().cpu(), synset.targets.cpu()],
+        # os.path.join(args.save_dir, 'data_0.pt'))
         # synset.test(args, val_loader, logger, bench=False)
 
     # Data distillation
@@ -355,8 +355,6 @@ def condense(args, logger, device='cuda'):
             final_path = os.path.join(args.pretrain_dir, 'premodel{}_trained.pth.tar'.format(slkt_model_id))
             model_final.load_state_dict(torch.load(final_path))
 
-
-
         free_energy_total, sem_loss_total = 0, 0
         synset.data.data = torch.clamp(synset.data.data, min=0., max=1.)
 
@@ -381,9 +379,6 @@ def condense(args, logger, device='cuda'):
                 loss =  sliced_gaussian_kl(feat_tg, feat, num_slices=args.num_slices, eps=args.eps)
             elif args.type == "PIDD": # KL_reverse
                 loss = sliced_gaussian_kl(feat, feat_tg, num_slices=args.num_slices, eps=args.eps)
-
-
-
 
             free_energy_total += loss.item()
             ts.stamp("loss")
@@ -429,11 +424,7 @@ def condense(args, logger, device='cuda'):
                 save_best = 1
 
                 logger("->->->->->->->->->->->->-> Best Result: {:.1f}".format(best_convnet))
-            
-
-            # It is okay to clamp data to [0, 1] at here.
-            # synset.data.data = torch.clamp(synset.data.data, min=0., max=1.)
-
+        
 
             if not args.test:
                 # save_img(os.path.join(args.save_dir, f'img{it+1}.png'),
@@ -447,6 +438,10 @@ def condense(args, logger, device='cuda'):
 
                 
                 if save_best:
+                    save_img(os.path.join(args.save_dir, f'best.png'),
+                        synset.data,
+                        unnormalize=False,
+                        dataname=args.dataset)
                     torch.save(
                     [synset.data.detach().cpu(), synset.targets.cpu()],
                     os.path.join(args.save_dir, 'data_best.pt'))
@@ -457,7 +452,7 @@ def condense(args, logger, device='cuda'):
 
 if __name__ == '__main__':
     from misc.utils import Logger
-    from arguments.arg_condense import args
+    from arguments.arg_distillation import args
     import torch.backends.cudnn as cudnn
     import json
 
@@ -480,4 +475,4 @@ if __name__ == '__main__':
     else:
         logger = print
 
-    condense(args, logger)
+    distillation(args, logger)

@@ -1,6 +1,6 @@
 import argparse
 
-from arguments.reproduce_condense import set_arguments
+from arguments.reproduce_distillation import set_arguments
 
 def str2bool(v):
     """Cast string to boolean
@@ -146,8 +146,8 @@ parser.add_argument('--save_ckpt', type=str2bool, default=False)
 parser.add_argument('--test', action='store_true', help='for debugging, do not save results')
 parser.add_argument('--time', action='store_true', help='measuring time for each step')
 
-# Condense
-parser.add_argument('-i', '--ipc', type=int, default=1, help='number of condensed data per class')
+# Distillation
+parser.add_argument('-i', '--ipc', type=int, default=1, help='number of synthetic data per class')
 parser.add_argument('-f',
                     '--factor',
                     type=int,
@@ -162,7 +162,7 @@ parser.add_argument('--init',
                     type=str,
                     default='random',
                     choices=['random', 'noise', 'mix'],
-                    help='condensed data initialization type')
+                    help='synthetic data initialization type')
 parser.add_argument('-a',
                     '--aug_type',
                     type=str,
@@ -191,8 +191,8 @@ parser.add_argument(
     help=
     'maximum number of synthetic data used for each matching (ramdom sampling for large synthetic data)'
 )
-parser.add_argument('--lr_img', type=float, default=5e-3, help='condensed data learning rate')
-parser.add_argument('--mom_img', type=float, default=0.5, help='condensed data momentum')
+parser.add_argument('--lr_img', type=float, default=5e-3, help='Synthetic data learning rate')
+parser.add_argument('--mom_img', type=float, default=0.5, help='Synthetic data momentum')
 parser.add_argument('--type', default='KL_forward', help='for selete KL_forward, KL_reverse') 
 parser.add_argument('--lambdac', type=float, default=0.0005, help='semantic calibration weight')
 parser.add_argument('--eps', type=float, default=1e-08, help='smoothing constant') 
@@ -206,8 +206,7 @@ parser.set_defaults(bottleneck=True)
 parser.set_defaults(verbose=False)
 args = parser.parse_args()
 
-if args.reproduce:
-    args = set_arguments(args)
+args = set_arguments(args)
 
 """ 
 DATA 

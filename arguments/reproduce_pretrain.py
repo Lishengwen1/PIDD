@@ -1,5 +1,5 @@
 def set_arguments(args):
-    """Specific arguments for reproduce our condensed data
+    """Specific arguments for reproduce our synthetic data
        The metric choice does not matter much.
        But, you should adjust lr_img according to the metric.
     """
