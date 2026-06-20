@@ -195,7 +195,7 @@ def visualize_energy_to_pdf(features,lables,
         'energy_cmap': 'RdYlGn_r'  
     }
 
-    # ----- Figure 1: Real points only (scatter, not energy‑colored) -----
+    # ----- Figure: Real points only (scatter, not energy‑colored) -----
     fig, ax = plt.subplots(figsize=figsize)
     ax.scatter(emb_real[:,0], emb_real[:,1], c=colors['real'], s=20, alpha=1.0,edgecolors='none')
     ax.set_xlim(x_lim)
@@ -220,10 +220,10 @@ def visualize_energy_to_pdf(features,lables,
         _remove_axes(ax)
         plt.tight_layout()
         
-        pp = PdfPages(os.path.join(save_path, "real_field_process_{}.pdf".format(k)))
+        pp = PdfPages(os.path.join(save_path, "real_field_process_{}.pdf".format(k*500)))
         pp.savefig(fig, bbox_inches='tight', dpi=300)
         pp.close()
-        plt.savefig(os.path.join(save_path, "real_field_process_{}.png".format(k)), bbox_inches='tight', dpi=300, transparent=True)
+        plt.savefig(os.path.join(save_path, "real_field_process_{}.png".format(k*500)), bbox_inches='tight', dpi=300, transparent=True)
         plt.close(fig)
 
 

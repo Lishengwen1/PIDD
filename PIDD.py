@@ -413,7 +413,7 @@ def distillation(args, logger, device='cuda'):
         # Logging
         if it % it_log == 0:
             logger(
-                f"{utils.get_time()} (Iter {it:3d}) sem-loss: {sem_loss_total/nclass:.6f}  free_energy: {free_energy_total/nclass:.6f}")
+                f"(Iter {it:3d}) sem-loss: {sem_loss_total/nclass:.6f}  free_energy: {free_energy_total/nclass:.6f}")
 
         save_best = 0
         if (it + 1) in it_test:
