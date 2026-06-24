@@ -22,6 +22,7 @@ python visualize.py
 ## Example Results
 
 The folder `./results/cifar10/PIDD/` contains example results from running PIDD on CIFAR-10. 
+The folder `./visualization/results/` contains example results from visualization. 
 
 ## Acknowledgement
 Our code is built upon [IDC](https://github.com/snu-mllab/efficient-dataset-condensation) and [DANCE](https://github.com/Hansong-Zhang/DANCE)
